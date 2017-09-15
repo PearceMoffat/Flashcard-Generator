@@ -53,6 +53,7 @@ var numberArray = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23
 shuffle(numberArray); // Randomize order of presidents
 var questionArray = []; // Array to hold the questions after they are created
 
+// Function to shuffle an array
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
   
@@ -72,6 +73,7 @@ function shuffle(array) {
     return array;
 }
 
+// Function to get the ordinal from an integer
 function ordinal_suffix_of(i) {
     var j = i % 10,
         k = i % 100;
@@ -103,28 +105,33 @@ function askQuestion() {
             name: "answer"
         }
     ]).then(function(resp) {
+        // The answer was correct
         if (resp.answer.toLowerCase() === questionArray[count].cloze.toLowerCase()) {
             console.log("Correct");
-            score++
+            score++; // Increase score
         }
+        // The answer was incorrect
         else {
             console.log("Incorrect");
             console.log("The correct answer was " + questionArray[count].cloze)
         }
         count++;
+        // If there are more presidents left, ask another question
         if (count < questionArray.length) {
             askQuestion();
         }
+        // Otherwise the game is over, display final score
         else {
             console.log("Quiz over. You got " + score + "/" + questionArray.length + " correct.");
         }
     })
 }
 
-//Game goes here
+// Start the question count and player score at 0
 var count = 0;
 var score = 0;
 
+// Prompt the user for difficulty level
 inquirer.prompt([
     {
         type: "list",
@@ -133,6 +140,8 @@ inquirer.prompt([
         name: "difficulty"
     }
 ]).then(function(resp) {
+    // Create the cloze cards at the inputted difficulty
     makeQuestions(resp.difficulty);
+    // Start the quiz
     askQuestion();
 });
